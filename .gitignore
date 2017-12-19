@@ -1,22 +1,91 @@
-# Compiled class file
-*.class
 
-# Log file
-*.log
+import java.util.Scanner;
 
-# BlueJ files
-*.ctxt
+public class JogoDaVelha {
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
+    public static void main(String[] args) {
+        boolean continuar = true;
+        Scanner teclado = new Scanner(System.in);
+        do{
+        String[] palavras = {"ABACAXI", "PERA", "MACA", "BANANA", "MORANGO"};
+        String palavraEscolhida = palavras[(int)(Math.random()*palavras.length)];
+        apresentacao(palavraEscolhida);
+        if(validacao(palavraEscolhida, teclado)){
+            System.out.println("Parabéns você acertou a palavra!");
+        }else{
+            System.out.println("Você perdeu todas suas tentativas! A palavra correta era... " + palavraEscolhida);
+        }
+            
+            System.out.println("Pretende continuar? [y] ou [n]");
+            String decisao = teclado.next().toLowerCase();
+            if(decisao.equals("n")){
+                continuar = false;
+            }
+        }while(continuar);
+        System.out.println("Obrigado por jogar!");
+        teclado.close();
+    }
+    
+    public static void apresentacao(String palavraEscolhida){
+        System.out.println("Sua palavra têm " + palavraEscolhida.length() + " letras.");
+        System.out.println("Boa Sorte!");
+        for(int i = 0; i < palavraEscolhida.length(); i++)
+            System.out.print("_ ");
+    }
+    
+    public static boolean validacao(String palavraEscolhida, Scanner teclado){
+        String[] palavraDoJogador = new String[palavraEscolhida.length()];
+        for(int i = 0; i < palavraDoJogador.length; i++)
+            palavraDoJogador[i] = "_";
+        String letrasTentadas = "";
+        int pontosDeVitoria = 0;
+        for(int tentativas = 4; tentativas >= 0;){
+         String letra = teclado.next().toUpperCase();
+             if(letrasTentadas.contains(letra)){
+                 System.out.println("Você já usou essa letra, tente outra!");
+             }else if(letra.length() > 1){
+                 System.out.println("Coloque apenas uma letra!");
+             }else{
+         boolean letraErrada = true;
+            for(int y = 0; y < palavraEscolhida.length(); y++){
+                String conversao = String.valueOf(palavraEscolhida.charAt(y));
+                if(letra.equals(conversao)){   
+                   if(!letrasTentadas.contains(letra)){   
+                    letrasTentadas += letra + " ";
+                   }
+                    palavraDoJogador[y] = conversao;
+                    letraErrada = false;
+                    pontosDeVitoria++;
+                }
+                if(pontosDeVitoria == palavraEscolhida.length()){
+                    for(String x : palavraDoJogador)
+                        System.out.print(x + " ");
+                    System.out.println();
+                    return true;
+                    
+                }
+                }
+            
+            if(letraErrada){
+                    tentativas--;
+                    letrasTentadas += letra + " ";
+                    System.out.println("Você errou. Tente novamente!");
+                    System.out.println("Tentativas restantes: " + tentativas + " - Letras já usadas: " + letrasTentadas);
+                    for(String x : palavraDoJogador)
+                        System.out.print(x + " ");
+                    System.out.println();
+            }else{
+                System.out.println("Você acertou!");
+                System.out.println("Tentativas restantes: " + tentativas + " - Letras já usadas: " + letrasTentadas);
+                for(String x : palavraDoJogador)
+                        System.out.print(x + " ");
+            }
+            
+        }
+        }
+        return false;
+    }
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+}
+
